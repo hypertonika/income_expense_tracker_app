@@ -1,42 +1,32 @@
 import 'package:flutter/material.dart';
-import 'about_page.dart';
+import 'package:provider/provider.dart';
+import 'providers/transaction_provider.dart';
+import 'screens/home_screen.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Income and Expense Tracker',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePage(), // Your main screen
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});  // Use super parameter here
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const AboutPage()),
-            );
-          },
-          child: Text('About the App'),
+    return ChangeNotifierProvider(
+      create: (_) => TransactionProvider(),
+      child: MaterialApp(
+        title: 'Income & Expense Tracker',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          useMaterial3: true,
+          cardTheme: CardTheme(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
         ),
+        home: const HomeScreen(),
       ),
     );
   }

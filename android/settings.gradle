@@ -1,0 +1,46 @@
+// Load the Flutter SDK path from local.properties
+def flutterSdkPath = {
+    def properties = new Properties()
+    def propertiesFile = new File(settingsDir, "local.properties")
+    if (propertiesFile.exists()) {
+        properties.load(propertiesFile.newDataInputStream())
+        def flutterSdk = properties.getProperty("flutter.sdk")
+        assert flutterSdk != null, "flutter.sdk not set in local.properties"
+        return flutterSdk
+    } else {
+        throw new GradleException("local.properties not found")
+    }
+}
+
+// This is required to provide the Flutter SDK path to Gradle
+gradle.beforeProject { project ->
+    project.extensions.extraProperties['flutter.sdk'] = flutterSdkPath()
+}
+
+// Move the pluginManagement block to the top
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven {
+            // Use flutterSdkPath method here
+            url "file:///C:/flutter/bin/cache/artifacts/engine/android-gradle-plugin"
+
+        }
+    }
+
+    plugins {
+        id 'dev.flutter.flutter-gradle-plugin' version '1.0.0'
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+include ':app'
